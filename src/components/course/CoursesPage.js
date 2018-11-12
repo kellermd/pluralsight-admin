@@ -1,12 +1,44 @@
 import React, {PropTypes} from 'react';
 
 class CoursesPage extends React.Component {
+
+    constructor(props, context) {
+        super(props, context);
+
+        this.state = {
+            course: {title:null}
+        };
+
+        // This binding is necessary to make `this` work in the callback
+        this.onClickSave = this.onClickSave.bind(this);
+        this.onTitleChange = this.onTitleChange.bind(this);
+    }
+
+    onTitleChange(event) {
+        const course = this.state.course;
+        course.title = event.target.value;
+        this.setState({course:course});
+    }
+
+    onClickSave() { // the class property is initialized with an arrow function that binds this to the class
+        alert(`Saving ${this.state.course.title}`);
+    }
+
     render() {
         return (
             <div>
                 <h1>Courses</h1>
-            </div>
+                <h2>Add Course</h2>
+                <input
+                    type="text"
+                    onChange={this.onTitleChange}
+                    value={this.state.course.title} />
 
+                <input
+                    type="submit"
+                    value="Save"
+                    onClick={this.onClickSave} />
+            </div>
         );
     }
 }
