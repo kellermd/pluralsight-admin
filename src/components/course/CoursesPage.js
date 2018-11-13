@@ -1,4 +1,6 @@
 import React, {PropTypes} from 'react';
+import {connect} from 'react-redux';
+import * as courseActions from '../../actions/courseActions';
 
 class CoursesPage extends React.Component {
 
@@ -12,6 +14,7 @@ class CoursesPage extends React.Component {
         // This binding is necessary to make `this` work in the callback
         this.onClickSave = this.onClickSave.bind(this);
         this.onTitleChange = this.onTitleChange.bind(this);
+        this.courseRow = this.courseRow.bind(this);
     }
 
     onTitleChange(event) {
@@ -21,13 +24,19 @@ class CoursesPage extends React.Component {
     }
 
     onClickSave() { // the class property is initialized with an arrow function that binds this to the class
-        alert(`Saving ${this.state.course.title}`);
+        this.props.dispatch(courseActions.createCourse(this.state.course));
+    }
+
+    courseRow(course, index) {
+        return <div key={index}>{course.title}</div>;
     }
 
     render() {
+        debugger;
         return (
             <div>
                 <h1>Courses</h1>
+                {this.props.courses.map(this.courseRow)}
                 <h2>Add Course</h2>
                 <input
                     type="text"
@@ -43,4 +52,16 @@ class CoursesPage extends React.Component {
     }
 }
 
-export default CoursesPage;
+CoursesPage.propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    courses: PropTypes.func.isRequired
+};
+
+function mapStateToProps(state, ownProps) {
+    debugger;
+    return {
+        courses: state.courses
+    };
+}
+
+export default connect(mapStateToProps)(CoursesPage);
